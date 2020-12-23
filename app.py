@@ -4,7 +4,7 @@ import imghdr
 import csv
 import argparse
 import logging
-
+from sqlalchemy import exc
 from flask import Flask, redirect, url_for, request
 from flask import render_template
 from flask import send_file
@@ -17,9 +17,10 @@ app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
-
-class Channel(db.Model):
-    image_name = db.Column(db.String(255), primary_key=True)
+######
+class Data(db.Model):
+    entry_id = db.Column(db.INTEGER, primary_key=True)
+    image_name = db.Column(db.String(255))
     caption = db.Column(db.String(255))
     xMax = db.Column(db.Float)
     xMin = db.Column(db.Float)
@@ -27,10 +28,10 @@ class Channel(db.Model):
     yMin = db.Column(db.Float)
 
     def __repr__(self):
-        return f"Channel('{self.image_name}','{self.caption}','{self.xMax}','{self.xMin}','{self.yMax}','{self.yMin}')"
+        return f"Data('{self.image_name}','{self.caption}','{self.xMax}','{self.xMin}','{self.yMax}','{self.yMin}')"
 
 def addQuery(image_name,caption, xMax, xMin,yMax,yMin):
-    query = Channel(image_name=image_name,caption=caption,xMax=xMax, xMin=xMin, yMax=yMax,yMin=yMin)
+    query = Data(image_name=image_name,caption=caption,xMax=xMax, xMin=xMin, yMax=yMax,yMin=yMin)
     db.session.add(query)
     db.session.commit()
 
@@ -128,4 +129,4 @@ if __name__ == "__main__":
     print(files)
     with open("out.csv",'w') as f:
         f.write("image,id,name,xMin,xMax,yMin,yMax\n")
-    app.run(debug=True)
+    app.run(host='0.0.0.0')
