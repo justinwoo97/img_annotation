@@ -88,12 +88,12 @@
       var ctx = c.getContext("2d");
       var drawLabels = function(id, xMin, xMax, yMin, yMax) {
         ctx.strokeStyle = "pink";
-        ctx.fillStyle = "pink";
+        ctx.fillStyle = "red";
         ctx.rect(xMin, yMin, xMax - xMin, yMax - yMin);
         ctx.lineWidth="3";
         ctx.stroke();
-        ctx.font = "10px Arial";
-        ctx.fillText("id: " + id, xMin,yMin);
+        ctx.font = "20px Arial";
+        ctx.fillText("id: " + id, xMin,yMin -10);
       };
       var image = new Image();
       console.log(image);
